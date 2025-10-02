@@ -24,3 +24,7 @@ async def login(user_data: UserLogin):
         return {"message": "Login successful", "user": user}
     else:
         raise HTTPException(status_code=401, detail="Invalid email or password") 
+    
+@router.delete("/forget_account")
+async def delete_account(): 
+    user = check_user(user_data.email, user_data.password)

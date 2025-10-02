@@ -26,24 +26,11 @@ app.include_router(embeddings.router)
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure this properly for production
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.post("/upload")
-def upload_image(file: UploadFile = File(...)):
-    os.makedirs("uploads", exist_ok=True)
-    contents = file.file.read()
-    with open(f"uploads/{file.filename}", "wb") as f:
-        f.write(contents)
-    return JSONResponse(content={"message": f"✅ {file.filename} received successfully"})
-
-
-
-
 
 
 

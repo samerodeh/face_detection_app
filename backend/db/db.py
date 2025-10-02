@@ -8,7 +8,7 @@ import bcrypt
 db_info = {
     "host": "localhost",
     "port": "5432",
-    "dbname": "face_embeddings",
+    "dbname": "postgres",
     "user": "postgres",
     "password": "Ottawa2006?"
 }
@@ -117,6 +117,7 @@ def user_exists(email):
         return False
 
 def delete_embedding(person_name):
+    # if embedding_exists(person_name):
     try:
         conn = psycopg2.connect(**db_info)
         cursor = conn.cursor()
@@ -129,7 +130,7 @@ def delete_embedding(person_name):
         conn.close()
         print(f"✅ Embedding deleted for {person_name}")
     except Exception as e:
-        print(f"❌ Error deleting embedding for {person_name}: {e}")
+            print(f"❌ Error deleting embedding for {person_name}: {e}")
 
 def update_embedding(person_name):
     try:
@@ -157,3 +158,16 @@ def embedding_exists(person_name):
     except Exception as e:
         print(f"Error checking if embedding exists for {person_name}: {e}")
         return False
+
+def list_embeddings():
+    try:
+        conn = psycopg2.connect(**db_info)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, person_name FROM embeddings ORDER BY id DESC")
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return [{"id": r[0], "person_name": r[1]} for r in rows]
+    except Exception as e:
+        print(f"Error listing embeddings: {e}")
+        return []
